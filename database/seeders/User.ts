@@ -4,8 +4,8 @@ import User from 'App/Models/User'
 export default class extends BaseSeeder {
   public async run () {
     await User.create({
-      email : 'admin',
-      password : 'password',
+      email : 'intellisense',
+      password : 'sensorJaya2022_123%',
     })
   }
 }
