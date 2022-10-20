@@ -51,6 +51,7 @@ export default class SensorInfosController {
       |> last()
       |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
       |> group(columns: ["_measurement"])
+      |> drop(columns: ["_start", "_stop"])
     `
     try {
       const result = await Influx.readPoints(flux)
@@ -75,16 +76,17 @@ export default class SensorInfosController {
       |> filter(fn: (r) => r["device_id"] == "${query.device_id}" )
       |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
       |> group(columns: ["_measurement"])
+      |> drop(columns: ["_start", "_stop"])
     `
 
     try {
       const result = await Influx.readPoints(flux)
       const groupByCategory = result.reduce((group: any, measurement: any) => {
-        const { _measurement } = measurement;
-        group[_measurement] = group[_measurement] ?? [];
-        group[_measurement].push(measurement);
-        return group;
-      }, {});
+        const { _measurement } = measurement
+        group[_measurement] = group[_measurement] ?? []
+        group[_measurement].push(measurement)
+        return group
+      }, {})
       return response.ok({ status: 'success', data: groupByCategory })
     } catch (error) {
       throw Error(error.message)
