@@ -26,7 +26,7 @@ export default class PowerInfoValidator {
   public schema = schema.create({
     device_id : schema.string(),
     event: schema.string(),
-    data: schema.object().anyMembers(),
+    data: schema.string(),
     timestamp: schema.string(),
     published_at: schema.string(),
     userid: schema.string(),

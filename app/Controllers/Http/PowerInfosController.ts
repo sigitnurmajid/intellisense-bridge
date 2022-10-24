@@ -8,9 +8,10 @@ export default class PowerInfosController {
         const payload = await request.validate(PowerInfoValidator)
         const point = new Point('power_info').tag('device_id', payload.device_id)
         const timestamp = new Date(payload.published_at)
+        const dataJson = JSON.parse(payload.data)
 
         point.timestamp(timestamp)
-        Object.entries(payload.data).forEach(([key, value]) => {
+        Object.entries(dataJson).forEach(([key, value]) => {
             switch (typeof value) {
                 case 'string':
                     point.stringField(key, value)
