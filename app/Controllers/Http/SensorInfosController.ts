@@ -57,6 +57,8 @@ export default class SensorInfosController {
       const result = await Influx.readPoints(flux)
       const obj = {}
       result.forEach((element: any) => {
+        delete element.result
+        delete element.table
         obj[element._measurement] = element
       })
       return response.ok({ status: 'success', data: obj })
@@ -82,6 +84,8 @@ export default class SensorInfosController {
     try {
       const result = await Influx.readPoints(flux)
       const groupByCategory = result.reduce((group: any, measurement: any) => {
+        delete measurement.table
+        delete measurement.result
         const { _measurement } = measurement
         group[_measurement] = group[_measurement] ?? []
         group[_measurement].push(measurement)
