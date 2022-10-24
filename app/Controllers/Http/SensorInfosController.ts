@@ -43,11 +43,12 @@ export default class SensorInfosController {
     const query = await request.validate(QuerySensorLastValidator)
     const bucket = Env.get('INFLUX_BUCKET', '')
     const measurement = this.buildMeasurements(query.measurement)
+    const deviceId = request.params().deviceId
 
     const flux = `from(bucket: "${bucket}")
       |> range(start: -30d)
       |> filter(fn: (r) => ${measurement} )
-      |> filter(fn: (r) => r["device_id"] == "${query.device_id}" )
+      |> filter(fn: (r) => r["device_id"] == "${deviceId}" )
       |> last()
       |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
       |> group(columns: ["_measurement"])
@@ -71,11 +72,12 @@ export default class SensorInfosController {
     const query = await request.validate(QuerySensorHistoryValidator)
     const bucket = Env.get('INFLUX_BUCKET', '')
     const measurement = this.buildMeasurements(query.measurement)
+    const deviceId = request.params().deviceId
 
     const flux = `from(bucket: "${bucket}")
       |> range(start: ${query.start}, stop: ${query.end})
       |> filter(fn: (r) => ${measurement} )
-      |> filter(fn: (r) => r["device_id"] == "${query.device_id}" )
+      |> filter(fn: (r) => r["device_id"] == "${deviceId}" )
       |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
       |> group(columns: ["_measurement"])
       |> drop(columns: ["_start", "_stop"])

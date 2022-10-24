@@ -25,7 +25,6 @@ export default class QuerySensorHistoryValidator {
    */
   public schema = schema.create({
     measurement : schema.array().members(schema.string()),
-    device_id : schema.string(),
     start : schema.date(),
     end : schema.date()
   })

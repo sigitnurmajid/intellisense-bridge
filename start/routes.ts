@@ -32,8 +32,8 @@ Route.group(() => {
     Route.post('sensor-info', 'SensorInfosController.store').middleware('auth')
     Route.post('power-info', 'PowerInfosController.store').middleware('auth')
     Route.post('online-info', 'OnlineInfosController.store').middleware('auth')
-    Route.get('sensor-info/last', 'SensorInfosController.last').middleware('auth')
-    Route.get('sensor-info/history', 'SensorInfosController.history').middleware('auth')
+    Route.get('intellisense/:deviceId/last', 'SensorInfosController.last').middleware('auth')
+    Route.get('intellisense/:deviceId/history', 'SensorInfosController.history').middleware('auth')
   }).prefix('/v1')
 }).prefix('/api')
 
