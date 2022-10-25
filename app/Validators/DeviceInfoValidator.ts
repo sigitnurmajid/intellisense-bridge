@@ -1,4 +1,4 @@
-import { schema, CustomMessages , rules} from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DeviceInfoValidator {
@@ -24,27 +24,15 @@ export default class DeviceInfoValidator {
    *    ```
    */
   public schema = schema.create({
-    device_id: schema.string(),
-    data_type: schema.string([
-      rules.equalTo('device_info')
-    ]),
-    data: schema.object().members({
-      wakeup_time: schema.string(),
-      temperature: schema.number(),
-      humidity: schema.number(),
-      solar_current: schema.number(),
-      solar_voltage: schema.number(),
-      solar_exposure: schema.number(),
-      battery_current: schema.number(),
-      battery_voltage: schema.number(),
-      battery_level: schema.number(),
-      memory_usage: schema.number(),
-      firmware_version: schema.string(),
-      hardware_version: schema.string(),
-      device_type: schema.string(),
-      timestamp: schema.string()
-    }),
-    published_at: schema.string()
+    device_id : schema.string(),
+    event: schema.string(),
+    data: schema.string(),
+    timestamp: schema.string(),
+    published_at: schema.string(),
+    userid: schema.string(),
+    version: schema.number(),
+    public: schema.boolean(),
+    productID: schema.number()
   })
 
   /**
