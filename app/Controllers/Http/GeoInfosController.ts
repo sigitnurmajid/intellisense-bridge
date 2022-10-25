@@ -6,10 +6,12 @@ import Influx from '@ioc:Zhelda/Influx'
 export default class GeoInfosController {
   public async store({request, response} : HttpContextContract ){
     const payload = await request.validate(GeoInfoValidator)
-    const point = new Point(payload.data_type).tag('device_id', payload.device_id)
+    const point = new Point('geo_info').tag('device_id', payload.device_id)
+    const timestamp = new Date(payload.published_at)
+    const dataJson = JSON.parse(payload.data)
 
-    Object.entries(payload.data).forEach(([key, value]) => {
-      if (key === 'timestamp') return point.timestamp(new Date(value))
+    point.timestamp(timestamp)
+    Object.entries(dataJson).forEach(([key, value]) => {
       switch (typeof value) {
         case 'string':
           point.stringField(key, value)
