@@ -11,7 +11,7 @@ export default class SensorInfosController {
     const payload = await request.validate(SensorInfoValidator)
     const sensor = params.sensor
     const point = new Point(sensor).tag('device_id', payload.device_id)
-    const timestamp = new Date(payload.published_at)
+    const timestamp = new Date(parseInt(payload.timestamp) * 1000)
     const dataJson = JSON.parse(payload.data)
 
     point.timestamp(timestamp)

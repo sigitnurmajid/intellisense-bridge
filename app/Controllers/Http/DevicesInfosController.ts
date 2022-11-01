@@ -7,7 +7,7 @@ export default class DevicesInfosController {
   public async store({ request ,response}: HttpContextContract) {
     const payload = await request.validate(DeviceInfoValidator)
     const point = new Point('device_info').tag('device_id', payload.device_id)
-    const timestamp = new Date(payload.published_at)
+    const timestamp = new Date(parseInt(payload.timestamp) * 1000)
     const dataJson = JSON.parse(payload.data)
 
     point.timestamp(timestamp)
