@@ -29,7 +29,7 @@ Route.group(() => {
   Route.group(() => {
     Route.post('device-info', 'DevicesInfosController.store').middleware('auth')
     Route.post('geo-info', 'GeoInfosController.store').middleware('auth')
-    Route.post('sensor-info', 'SensorInfosController.store').middleware('auth')
+    Route.post('sensor-info/:sensor', 'SensorInfosController.store').middleware('auth')
     Route.post('power-info', 'PowerInfosController.store').middleware('auth')
     Route.post('online-info', 'OnlineInfosController.store').middleware('auth')
     Route.get('intellisense/:deviceId/last', 'SensorInfosController.last').middleware('auth')

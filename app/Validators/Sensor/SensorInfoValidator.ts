@@ -24,21 +24,15 @@ export default class SensorInfoValidator {
    *    ```
    */
   public schema = schema.create({
-    device_id: schema.string(),
-    data_type: schema.string([
-      rules.equalTo('sensor_info')
-    ]),
-    data: schema.array().members(
-      schema.object().members({
-        name: schema.string.nullableAndOptional(),
-        status: schema.string(),
-        analog_value: schema.number(),
-        sensor_restart_attempt: schema.number(),
-        error_code: schema.number()
-      })
-    ),
-    timestamp : schema.string(),
-    published_at : schema.string()
+    device_id : schema.string(),
+    event: schema.string(),
+    data: schema.string(),
+    timestamp: schema.string(),
+    published_at: schema.string(),
+    userid: schema.string(),
+    version: schema.number(),
+    public: schema.boolean(),
+    productID: schema.number()
   })
 
   /**

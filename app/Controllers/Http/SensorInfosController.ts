@@ -7,32 +7,27 @@ import Env from '@ioc:Adonis/Core/Env'
 import QuerySensorHistoryValidator from 'App/Validators/Sensor/QuerySensorHistoryValidator'
 
 export default class SensorInfosController {
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ params, request, response }: HttpContextContract) {
     const payload = await request.validate(SensorInfoValidator)
-    const timestamp = new Date(payload.timestamp)
+    const sensor = params.sensor
+    const point = new Point(sensor).tag('device_id', payload.device_id)
+    const timestamp = new Date(payload.published_at)
+    const dataJson = JSON.parse(payload.data)
 
-    // filter sensor data
-    const pointsFiltered = payload.data.filter(value => { return value.name !== undefined })
-
-    const points = pointsFiltered.map(x => {
-      const point = new Point(x.name!).tag('device_id', payload.device_id)
-      point.timestamp(timestamp)
-      Object.entries(x).forEach(([key, value]) => {
-        switch (typeof value) {
-          case 'string':
-            point.stringField(key, value)
-            break
-          case 'number':
-            Number.isInteger(value) ? point.intField(key, value) : point.floatField(key, value)
-            break
-        }
-      })
-
-      return point
+    point.timestamp(timestamp)
+    Object.entries(dataJson).forEach(([key, value]) => {
+      switch (typeof value) {
+        case 'string':
+          point.stringField(key, value)
+          break
+        case 'number':
+          Number.isInteger(value) ? point.intField(key, value) : point.floatField(key, value)
+          break
+      }
     })
 
     try {
-      await Influx.writePoints(points)
+      await Influx.writePoint(point)
       return response.ok({ status: 'success', message: 'Saved' })
     } catch (error) {
       throw Error(error.message)
